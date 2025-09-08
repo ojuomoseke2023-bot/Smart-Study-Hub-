@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quizzes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1 class="site-title">📚 Student Study Hub</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="quizzes.html">Quizzes</a></li>
+                    <li><a href="tips.html">Study Tips</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="quiz-section">
+            <h2>Biology Quiz</h2>
+            <div id="quiz-container">
+                </div>
+            <button id="submit-quiz-btn" class="button">Submit Quiz</button>
+            <div id="quiz-results" class="results-box"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Student Study Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data for the quiz questions, answers, and feedback
+        const quizQuestions = [
+            {
+                question: "1. Which of these is the basic unit of life?",
+                options: ["A. Tissue", "B. Cell", "C. Organ", "D. System"],
+                answer: "B"
+            },
+            {
+                question: "2. The powerhouse of the cell is the:",
+                options: ["A. Ribosome", "B. Chloroplast", "C. Mitochondrion", "D. Nucleus"],
+                answer: "C"
+            },
+            {
+                question: "3. Ribosomes are responsible for:",
+                options: ["A. Respiration", "B. Photosynthesis", "C. Protein synthesis", "D. Excretion"],
+                answer: "C"
+            },
+            {
+                question: "4. Which blood cells defend the body against infections?",
+                options: ["A. Red blood cells", "B. White blood cells", "C. Platelets", "D. Plasma cells"],
+                answer: "B"
+            },
+            {
+                question: "5. The pigment that gives red blood cells their color is:",
+                options: ["A. Melanin", "B. Hemoglobin", "C. Keratin", "D. Chlorophyll"],
+                answer: "B"
+            },
+            {
+                question: "6. Which organ produces bile?",
+                options: ["A. Pancreas", "B. Kidney", "C. Liver", "D. Stomach"],
+                answer: "C"
+            },
+            {
+                question: "7. Which of the following is a product of photosynthesis?",
+                options: ["A. Oxygen", "B. Carbon dioxide", "C. Water", "D. ATP"],
+                answer: "A"
+            },
+            {
+                question: "8. Which of these tissues transports manufactured food in plants?",
+                options: ["A. Xylem", "B. Phloem", "C. Cambium", "D. Cortex"],
+                answer: "B"
+            },
+            {
+                question: "9. The loss of water vapor through the stomata is called:",
+                options: ["A. Evaporation", "B. Transpiration", "C. Respiration", "D. Condensation"],
+                answer: "B"
+            },
+            {
+                question: "10. Which of these is a producer in a food chain?",
+                options: ["A. Goat", "B. Lion", "C. Grass", "D. Man"],
+                answer: "C"
+            },
+            {
+                question: "11. Which of these is an example of parasitism?",
+                options: ["A. Lichen and algae", "B. Tick on a dog", "C. Bees and flowers", "D. Cattle and egret"],
+                answer: "B"
+            },
+            {
+                question: "12. The gradual development of complex organisms from simpler forms is called:",
+                options: ["A. Ecology", "B. Evolution", "C. Genetics", "D. Classification"],
+                answer: "B"
+            },
+            {
+                question: "13. What type of joint is found in the knee?",
+                options: ["A. Ball-and-socket", "B. Hinge", "C. Pivot", "D. Gliding"],
+                answer: "B"
+            },
+            {
+                question: "14. Which part of the human brain controls balance and coordination?",
+                options: ["A. Cerebrum", "B. Medulla oblongata", "C. Cerebellum", "D. Hypothalamus"],
+                answer: "C"
+            },
+            {
+                question: "15. The functional unit of the kidney is the:",
+                options: ["A. Nephron", "B. Neuron", "C. Alveolus", "D. Villus"],
+                answer: "A"
+            },
+            {
+                question: "16. Which of these is a sexual method of reproduction in plants?",
+                options: ["A. Budding", "B. Cutting", "C. Pollination", "D. Grafting"],
+                answer: "C"
+            },
+            {
+                question: "17. The female part of a flower is the:",
+                options: ["A. Stamen", "B. Pistil (carpel)", "C. Sepal", "D. Petal"],
+                answer: "B"
+            },
+            {
+                question: "18. The sum of all ecosystems on Earth is called:",
+                options: ["A. Biosphere", "B. Habitat", "C. Population", "D. Niche"],
+                answer: "A"
+            },
+            {
+                question: "19. Who is regarded as the father of evolution?",
+                options: ["A. Aristotle", "B. Mendel", "C. Darwin", "D. Lamarck"],
+                answer: "C"
+            },
+            {
+                question: "20. Which of the following is NOT a component of the cell membrane?",
+                options: ["A. Protein", "B. Lipid", "C. Carbohydrate", "D. Nucleic acid"],
+                answer: "D"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const submitBtn = document.getElementById('submit-quiz-btn');
+        const resultsBox = document.getElementById('quiz-results');
+
+        // Function to build the quiz questions on the page
+        function buildQuiz() {
+            quizQuestions.forEach((questionData, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('question-block');
+                questionElement.innerHTML = `<p>${questionData.question}</p>`;
+
+                questionData.options.forEach(option => {
+                    const label = document.createElement('label');
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question${index}`;
+                    input.value = option.split('.')[0]; // e.g., 'A', 'B'
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(option));
+
+                    questionElement.appendChild(label);
+                });
+
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        // Check if an answer is correct and provide instant feedback
+        function checkAnswer(event) {
+            const selectedOption = event.target;
+            const questionBlock = selectedOption.closest('.question-block');
+            const questionIndex = parseInt(selectedOption.name.replace('question', ''));
+            const answer = quizQuestions[questionIndex].answer;
+            const isCorrect = selectedOption.value === answer;
+
+            // Disable all options for this question after one is selected
+            const options = questionBlock.querySelectorAll('input[type="radio"]');
+            options.forEach(option => option.disabled = true);
+            
+            // Add instant feedback
+            const feedback = document.createElement('span');
+            feedback.classList.add('feedback-message');
+            feedback.textContent = isCorrect ? '✅ Correct' : '❌ Wrong';
+            feedback.style.color = isCorrect ? 'green' : 'red';
+            questionBlock.appendChild(feedback);
+        }
+
+        // Calculate and display the final score
+        submitBtn.addEventListener('click', () => {
+            let score = 0;
+            quizQuestions.forEach((questionData, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === questionData.answer) {
+                    score++;
+                }
+            });
+
+            const totalQuestions = quizQuestions.length;
+            resultsBox.innerHTML = `<h3>Quiz Results</h3><p>You scored ${score} out of ${totalQuestions}!</p>`;
+        });
+
+        // Add event listeners to radio buttons for instant feedback
+        quizContainer.addEventListener('change', checkAnswer);
+
+        // Build the quiz on page load
+        buildQuiz();
+    </script>
+
+</body>
+</html>
